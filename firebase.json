@@ -1,0 +1,26 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "olopsc-oats",
+          "configurations": {
+            "web": "1:583383924985:web:3017c3052fbf3af714a228"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "site": "olopsc-forms",
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "asia-east1"
+    }
+  }
+}
