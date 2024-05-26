@@ -31,11 +31,30 @@ class _QuestionsPageState extends State<QuestionsPage> {
       TextEditingController();
   late final TextEditingController question6Controller =
       TextEditingController();
-  int? stronglyAgree = 0;
-  int? agree = 0;
-  int? neutral = 0;
-  int? disagree = 0;
-  int? stronglyDisagree = 0;
+  // Question 2
+  int? stronglyAgree2 = 0;
+  int? agree2 = 0;
+  int? neutral2 = 0;
+  int? disagree2 = 0;
+  int? stronglyDisagree2 = 0;
+  // Question 3
+  int? stronglyAgree3 = 0;
+  int? agree3 = 0;
+  int? neutral3 = 0;
+  int? disagree3 = 0;
+  int? stronglyDisagree3 = 0;
+  // Question 5
+  int? stronglyAgree5 = 0;
+  int? agree5 = 0;
+  int? neutral5 = 0;
+  int? disagree5 = 0;
+  int? stronglyDisagree5 = 0;
+  // Question 6
+  int? stronglyAgree6 = 0;
+  int? agree6 = 0;
+  int? neutral6 = 0;
+  int? disagree6 = 0;
+  int? stronglyDisagree6 = 0;
   late final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final Map information = widget.userInformation;
   late final FirestoreService alumni = FirestoreService();
@@ -132,16 +151,20 @@ class _QuestionsPageState extends State<QuestionsPage> {
       'question_6': question6Controller.text,
     });
 
-    final DocumentReference documentStats =
-        alumni.stats.doc(information['year_graduated']);
-    final DocumentSnapshot yearData = await documentStats.get();
-    if (yearData.exists) {
-      await documentStats.update({'value': yearData.get('value') + 1});
-    } else {
-      await documentStats.set({
-        'value': 1,
-        'year': int.parse(information['year_graduated']),
-      });
+    try {
+      final DocumentReference documentStats =
+          alumni.stats.doc(information['year_graduated']);
+      final DocumentSnapshot yearData = await documentStats.get();
+      if (yearData.exists) {
+        await documentStats.update({'value': yearData.get('value') + 1});
+      } else {
+        await documentStats.set({
+          'value': 1,
+          'year': int.parse(information['year_graduated']),
+        });
+      }
+    } catch (e) {
+      print('Error: ${e}');
     }
 
     final DocumentReference documentEmpStats =
@@ -154,11 +177,16 @@ class _QuestionsPageState extends State<QuestionsPage> {
         documentEmpStats.update({
           'year': int.parse(information['year_graduated']),
           'privately_employed': empStatsData.get('privately_employed') + 1,
+          'index': int.parse(information['year_graduated']) - 2001,
         });
       } catch (e) {
         await documentEmpStats.set({
           'year': int.parse(information['year_graduated']),
           'privately_employed': 1,
+          'index': int.parse(information['year_graduated']) - 2001,
+          'government_employed': 0,
+          'self_employed': 0,
+          'others': 0,
         }, SetOptions(merge: true));
       }
     } else if (information['employment_status'].toLowerCase() ==
@@ -167,11 +195,16 @@ class _QuestionsPageState extends State<QuestionsPage> {
         await documentEmpStats.update({
           'year': int.parse(information['year_graduated']),
           'government_employed': empStatsData.get('government_employed') + 1,
+          'index': int.parse(information['year_graduated']) - 2001,
         });
       } catch (e) {
         await documentEmpStats.set({
           'year': int.parse(information['year_graduated']),
           'government_employed': 1,
+          'index': int.parse(information['year_graduated']) - 2001,
+          'privately_employed': 0,
+          'self_employed': 0,
+          'others': 0,
         }, SetOptions(merge: true));
       }
     } else if (information['employment_status'].toLowerCase() ==
@@ -180,11 +213,16 @@ class _QuestionsPageState extends State<QuestionsPage> {
         await documentEmpStats.update({
           'year': int.parse(information['year_graduated']),
           'self_employed': empStatsData.get('self_employed') + 1,
+          'index': int.parse(information['year_graduated']) - 2001,
         });
       } catch (e) {
         await documentEmpStats.set({
           'year': int.parse(information['year_graduated']),
           'self_employed': 1,
+          'index': int.parse(information['year_graduated']) - 2001,
+          'government_employed': 0,
+          'privately_employed': 0,
+          'others': 0,
         }, SetOptions(merge: true));
       }
     } else if (information['employment_status'].toLowerCase() == 'others') {
@@ -192,37 +230,81 @@ class _QuestionsPageState extends State<QuestionsPage> {
         await documentEmpStats.update({
           'year': int.parse(information['year_graduated']),
           'others': empStatsData.get('others') + 1,
+          'index': int.parse(information['year_graduated']) - 2001,
         });
       } catch (e) {
         await documentEmpStats.set({
           'year': int.parse(information['year_graduated']),
           'others': 1,
+          'index': int.parse(information['year_graduated']) - 2001,
+          'government_employed': 0,
+          'self_employed': 0,
+          'privately_employed': 0,
         }, SetOptions(merge: true));
       }
     }
-    // final DocumentReference collectionRef1 = FirebaseFirestore.instance
-    //     .collection('question_2')
-    //     .doc(information['degree']);
-    // final DocumentSnapshot qDoc = await collectionRef1.get();
-    // try {
-    //   collectionRef1.update({
-    //     'strongly_agree': qDoc.get('privately_employed') == null
-    //         ? stronglyAgree
-    //         : qDoc.get('strongly_agree') + 1,
-    //     'agree': qDoc.get('privately_employed') + agree,
-    //     'neutral': qDoc.get('privately_employed') + neutral,
-    //     'disagree': qDoc.get('privately_employed') + disagree,
-    //     'strongly_disagree': qDoc.get('privately_employed') + stronglyDisagree,
-    //   });
-    // } catch (e) {
-    //   await documentEmpStats.set({
-    //     'strongly_agree': stronglyAgree,
-    //     'agree': agree,
-    //     'neutral': neutral,
-    //     'disagree': disagree,
-    //     'strongly_disagree': stronglyDisagree,
-    //   }, SetOptions(merge: true));
-    // }
+    // ----------------------------------- //
+    try {
+      final DocumentReference collectionRef1 = FirebaseFirestore.instance
+          .collection('question_2')
+          .doc(information['degree']);
+      final DocumentSnapshot qDoc = await collectionRef1.get();
+      collectionRef1.update({
+        'strongly_agree': qDoc.get('strongly_agree') + stronglyAgree2,
+        'agree': qDoc.get('agree') + agree2,
+        'neutral': qDoc.get('neutral') + neutral2,
+        'disagree': qDoc.get('disagree') + disagree2,
+        'strongly_disagree': qDoc.get('strongly_disagree') + stronglyDisagree2,
+      });
+    } catch (e) {
+      print('Error: ${e}');
+    }
+    try {
+      final DocumentReference collectionRef1 = FirebaseFirestore.instance
+          .collection('question_3')
+          .doc(information['degree']);
+      final DocumentSnapshot qDoc = await collectionRef1.get();
+      collectionRef1.update({
+        'strongly_agree': qDoc.get('strongly_agree') + stronglyAgree3,
+        'agree': qDoc.get('agree') + agree3,
+        'neutral': qDoc.get('neutral') + neutral3,
+        'disagree': qDoc.get('disagree') + disagree3,
+        'strongly_disagree': qDoc.get('strongly_disagree') + stronglyDisagree3,
+      });
+    } catch (e) {
+      print('Error: ${e}');
+    }
+    try {
+      final DocumentReference collectionRef1 = FirebaseFirestore.instance
+          .collection('question_5')
+          .doc(information['degree']);
+      final DocumentSnapshot qDoc = await collectionRef1.get();
+      collectionRef1.update({
+        'strongly_agree': qDoc.get('strongly_agree') + stronglyAgree5,
+        'agree': qDoc.get('agree') + agree5,
+        'neutral': qDoc.get('neutral') + neutral5,
+        'disagree': qDoc.get('disagree') + disagree5,
+        'strongly_disagree': qDoc.get('strongly_disagree') + stronglyDisagree5,
+      });
+    } catch (e) {
+      print('Error: ${e}');
+    }
+    try {
+      final DocumentReference collectionRef1 = FirebaseFirestore.instance
+          .collection('question_6')
+          .doc(information['degree']);
+      final DocumentSnapshot qDoc = await collectionRef1.get();
+      collectionRef1.update({
+        'strongly_agree': qDoc.get('strongly_agree') + stronglyAgree6,
+        'agree': qDoc.get('agree') + agree6,
+        'neutral': qDoc.get('neutral') + neutral6,
+        'disagree': qDoc.get('disagree') + disagree6,
+        'strongly_disagree': qDoc.get('strongly_disagree') + stronglyDisagree6,
+      });
+    } catch (e) {
+      print('Error: ${e}');
+    }
+
     return documentID;
   }
 
@@ -377,17 +459,17 @@ class _QuestionsPageState extends State<QuestionsPage> {
                                       onChanged: (String? value) {
                                         setState(() {
                                           question2Controller.text = value!;
-                                          if (value == 'Strongly Agree') {
-                                            stronglyAgree = 1;
+                                          if (value == 'Strongly agree') {
+                                            stronglyAgree2 = 1;
                                           } else if (value == 'Agree') {
-                                            agree = 1;
+                                            agree2 = 1;
                                           } else if (value == 'Neutral') {
-                                            neutral = 1;
+                                            neutral2 = 1;
                                           } else if (value == 'Disagree') {
-                                            disagree = 1;
+                                            disagree2 = 1;
                                           } else if (value ==
-                                              'Strongly Disagree') {
-                                            stronglyDisagree = 1;
+                                              'Strongly disagree') {
+                                            stronglyDisagree2 = 1;
                                           }
                                         });
                                       },
@@ -479,6 +561,19 @@ class _QuestionsPageState extends State<QuestionsPage> {
                                               setState(() {
                                                 question3Controller.text =
                                                     value!;
+                                                if (value == 'Strongly agree') {
+                                                  stronglyAgree3 = 1;
+                                                } else if (value == 'Agree') {
+                                                  agree3 = 1;
+                                                } else if (value == 'Neutral') {
+                                                  neutral3 = 1;
+                                                } else if (value ==
+                                                    'Disagree') {
+                                                  disagree3 = 1;
+                                                } else if (value ==
+                                                    'Strongly disagree') {
+                                                  stronglyDisagree3 = 1;
+                                                }
                                               });
                                             },
                                             buttonStyleData: ButtonStyleData(
@@ -571,6 +666,19 @@ class _QuestionsPageState extends State<QuestionsPage> {
                                               setState(() {
                                                 question4Controller.text =
                                                     value!;
+                                                if (value == 'Strongly agree') {
+                                                  stronglyAgree5 = 1;
+                                                } else if (value == 'Agree') {
+                                                  agree5 = 1;
+                                                } else if (value == 'Neutral') {
+                                                  neutral5 = 1;
+                                                } else if (value ==
+                                                    'Disagree') {
+                                                  disagree5 = 1;
+                                                } else if (value ==
+                                                    'Strongly disagree') {
+                                                  stronglyDisagree5 = 1;
+                                                }
                                               });
                                             },
                                             buttonStyleData: ButtonStyleData(
@@ -663,6 +771,19 @@ class _QuestionsPageState extends State<QuestionsPage> {
                                               setState(() {
                                                 question5Controller.text =
                                                     value!;
+                                                if (value == 'Strongly agree') {
+                                                  stronglyAgree6 = 1;
+                                                } else if (value == 'Agree') {
+                                                  agree6 = 1;
+                                                } else if (value == 'Neutral') {
+                                                  neutral6 = 1;
+                                                } else if (value ==
+                                                    'Disagree') {
+                                                  disagree6 = 1;
+                                                } else if (value ==
+                                                    'Strongly disagree') {
+                                                  stronglyDisagree6 = 1;
+                                                }
                                               });
                                             },
                                             buttonStyleData: ButtonStyleData(
