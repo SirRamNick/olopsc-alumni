@@ -1,10 +1,10 @@
-import 'dart:html';
 import 'package:alumni/pages/home_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
+
   @override
   State<WelcomePage> createState() => _WelcomePageState();
 }
@@ -21,141 +21,122 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 210, 49, 1),
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 210, 49, 1),
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: const Color(0xFFFFD231),
+      appBar: _buildAppBar(),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.topLeft,
-                child: Text('OLOPSC Alumni Form'),
-              ),
-            ),
-            SizedBox(
-              width: 50,
-            ),
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.topRight,
-                child: Text('OLOPSC Alumni Tracking System (OATS)'),
-              ),
-            ),
+            _buildHeaderSection(),
+            _buildAnimatedMessage(),
+            _buildGetStartedButton(context),
           ],
         ),
       ),
-      body: Container(
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-                'https://lh3.googleusercontent.com/d/1A9nZdV4Y4kXErJlBOkahkpODE7EVhp1x'),
-            alignment: Alignment.bottomLeft,
-            scale: 2.5,
-            opacity: 0.8,
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: const Color(0xFFFFD231),
+      title: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'OLOPSC Alumni Form',
+            style: TextStyle(fontSize: 18),
           ),
+          SizedBox(height: 4),
+          Text(
+            'OLOPSC Alumni Tracking System (OATS)',
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeaderSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Column(
+        children: [
+          Image.network(
+            'https://lh3.googleusercontent.com/d/1DlDDvI0eIDivjwvCrngmyKp_Yr6d8oqH',
+            scale: 1.5,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'Our Lady of Perpetual Succor College',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const Text(
+            'Alumni Tracking System',
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Made By: '),
+              Opacity(
+                opacity: 0.9,
+                child: Image.network(
+                  'https://lh3.googleusercontent.com/d/1VDWlFOEyS-rftjzmy1DtWYNf5HvDSDq3',
+                  scale: 39.5,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnimatedMessage() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+      child: AnimatedTextKit(
+        animatedTexts: [
+          TypewriterAnimatedText(
+            'Welcome, Alumni!',
+            textAlign: TextAlign.center,
+            textStyle:
+                const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          TyperAnimatedText(
+            'By answering this Alumni Form, you agree to share your information with the OLOPSC Alumni Tracking System.'
+            '\nThe data will be used to evaluate the effectiveness of OLOPSC programs since 2002.'
+            '\nAll information will be treated with strict confidentiality.'
+            '\nTo proceed, click the button below.',
+            textAlign: TextAlign.center,
+            textStyle: const TextStyle(fontSize: 16),
+            speed: const Duration(milliseconds: 30),
+          ),
+        ],
+        pause: const Duration(milliseconds: 2000),
+        isRepeatingAnimation: false,
+        displayFullTextOnTap: true,
+      ),
+    );
+  }
+
+  Widget _buildGetStartedButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF0B0A5F),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         ),
-        child: Column(
-          children: <Widget>[
-            //start
-            Expanded(
-              child: SingleChildScrollView(
-                child: Form(
-                  key: formKey,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        //olopsc logo // olopsc name
-                        Image.network(
-                            'https://lh3.googleusercontent.com/d/1DlDDvI0eIDivjwvCrngmyKp_Yr6d8oqH',
-                            scale: 1.5),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const Text('Our Lady of Perpetual Succor College'),
-                        const Text('Alumni Tracking System'),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            //OCS Logo // Recognition & Credit
-                            const Text('Made By: '),
-                            Opacity(
-                              opacity: 0.9,
-                              child: Image.network(
-                                  // 'https://lh3.googleusercontent.com/d/19U4DW6KMNsVOqT6ZzX_ikpezY2N24Vyi',
-                                  'https://lh3.googleusercontent.com/d/1VDWlFOEyS-rftjzmy1DtWYNf5HvDSDq3',
-                                  scale: 39.5),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              //end
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Container(
-                  margin: EdgeInsets.only(top: 25, left: 20.0, right: 20.0),
-                  alignment: Alignment.topCenter,
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      TypewriterAnimatedText(
-                        'Welcome, Alumni!',
-                        textAlign: TextAlign.center,
-                        textStyle: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                      TyperAnimatedText(
-                          'By answering this Alumni Form, you have agreed to share your information to the OLOPSC ALUMNI TRACKING SYSTEM.'
-                          '\nThe data will be used to determine the effectiveness of the programs offered by OLOPSC starting from the year 2002.'
-                          '\nThe data received will be treated with the utmost confidentiality.\nTo answer the form, click the button below.',
-                          textAlign: TextAlign.center,
-                          textStyle: TextStyle(
-                            fontSize: 30,
-                          ),
-                          speed: Duration(milliseconds: 30)),
-                    ],
-                    pause: Duration(milliseconds: 3000),
-                    isRepeatingAnimation: false,
-                    displayFullTextOnTap: true,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 385),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(
-                    const Color.fromRGBO(11, 10, 95, 1),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Get Started',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        },
+        child: const Text(
+          'Get Started',
+          style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
     );

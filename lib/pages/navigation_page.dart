@@ -55,14 +55,14 @@ class _NavigationPageState extends State<NavigationPage> {
     final bool isLargeScreen = width > 800;
 
     final pages = [
-      Profile(docID: documentID),
-      About(),
+      ProfileScreen(docID: documentID),
+      const About(),
     ];
 
     return Scaffold(
       bottomNavigationBar: isSmallScreen
           ? BottomNavigationBar(
-              backgroundColor: Color.fromRGBO(11, 10, 95, 1),
+              backgroundColor: const Color.fromRGBO(11, 10, 95, 1),
               unselectedItemColor: const Color.fromRGBO(255, 210, 49, 1),
               selectedItemColor: const Color.fromRGBO(255, 210, 49, 1),
               items: _navBarItems,
